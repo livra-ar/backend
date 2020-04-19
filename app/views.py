@@ -1,0 +1,221 @@
+# # 
+# from rest_framework_mongoengine.viewsets import ModelViewSet as MongoModelViewSet
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, mixins, permissions#, authentication
+from .permissions import IsOwnerOfBookOrReadOnly, IsOwnerOfContentOrReadOnly
+from .serializers import ContentSerializer, BookSerializer
+from .models import Content, Book
+from creators.authentication import TokenAuthentication
+from rest_framework_mongoengine import viewsets
+from rest_framework.decorators import authentication_classes, permission_classes,api_view
+
+# class BookViewSet(
+#                     mixins.ListModelMixin,
+#                     mixins.CreateModelMixin,
+#                     mixins.RetrieveModelMixin,
+#                     mixins.UpdateModelMixin,
+#                     mixins.DestroyModelMixin,
+#                     viewsets.GenericViewSet
+#     ):
+    
+#     authentication_classes= [TokenAuthentication]
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOfBookOrReadOnly)
+#     serializer_class = BookSerializer
+#     def perform_create(self, serializer):
+#         serializer.save(publisher=self.request.user)
+
+#     def post(self, request, *args, **kwargs):
+#         if 'id' in request.data.keys():
+#             del request.data['id']
+#         self.create(self, request, args, kwargs)
+
+#     def get_queryset(self):
+#         return Book.objects.all()
+
+# class ContentViewSet(
+#                     mixins.ListModelMixin,
+#                     mixins.CreateModelMixin,
+#                     mixins.RetrieveModelMixin,
+#                     mixins.UpdateModelMixin,
+#                     mixins.DestroyModelMixin,
+#                     viewsets.GenericViewSet
+#     ):
+    
+#     authentication_classes= [TokenAuthentication]
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOfContentOrReadOnly)
+#     serializer_class = ContentSerializer
+
+#     def post(self, request, *args, **kwargs):
+#         if 'id' in request.data.keys(): 
+#             del request.data['id']
+#         self.create(self, request, args, kwargs)
+
+#     def get_queryset(self):
+#         return Content.objects.all()
+
+class BookList(APIView):
+    authentication_classes= [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self, request, format=None):
+        content = Book.objects.all()
+        serializer = BookSerializer(content, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        if 'id' in request.data.keys():
+            del request.data['id'] 
+        request.data['publisher'] = request.user
+        serializer = BookSerializer(data=request.data,context= {'request' : request})
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PublisherBooks(APIView):
+    authentication_classes= [TokenAuthentication]
+    def get_objects(self, pk):
+        try:
+            return Book.objects(publisher=pk)
+        except Book.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        books = self.get_objects(request.user)
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def creator_content(request, format=None):
+    try:
+        content = Content.objects(creator=request.user)
+        serializer = ContentSerializer(content, many=True)
+        return Response(serializer.data)
+    except Content.DoesNotExist:
+        raise Http404
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+def book_content(request, pk, format=None):
+    try:
+        book = Book.objects.get(id = pk)
+        content = Content.objects(book = book, active=True)
+        serializer = ContentSerializer(content, many=True)
+        return Response(serializer.data)
+    except Content.DoesNotExist:
+        raise Http404
+    except Book.DoesNotExist:
+        raise Http404
+
+class BookDetail(APIView):
+    authentication_classes= [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOfBookOrReadOnly]
+    def get_object(self, pk):
+        try:
+            return Book.objects.get(id=pk)
+        except Book.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        try:
+            book = self.get_object(pk)
+        except:
+            raise Http404
+        serializer = BookSerializer(book)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        book = self.get_object(pk)
+        self.check_object_permissions(request, book)
+        serializer = BookSerializer(book, request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def patch(self, request, pk, format=None):
+    #       book = self.get_object(pk)
+    #       serializer = BookSerializer(book, request.data, partial=True)
+
+    #       if serializer.is_valid():
+    #           serializer.save()
+    #           return Response(serializer.data)
+    #       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        book = self.get_object(pk)
+        self.check_object_permissions(request, book)
+        book.delete()
+        #delete images from storage & clear index
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ContentList(APIView):
+    authentication_classes= [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self, request, format=None):
+        content = Content.objects.all()
+        serializer = ContentSerializer(content, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        if 'id' in request.data.keys():
+            del request.data['id'] 
+        request.data['creator'] = request.user
+        serializer = ContentSerializer(data=request.data,context= {'request' : request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ContentDetail(APIView):
+    authentication_classes= [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOfContentOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            return Content.objects.get(id=pk)
+        except Content.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        content = self.get_object(pk)
+        serializer = ContentSerializer(content)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        content = self.get_object(pk)
+        self.check_object_permissions(request, content)
+        # data = request.data
+        # print(data)
+        # try:
+        #     data['book'] = Book.objects.get(id=data['book'])
+        # except Book.DoesNotExist:
+        #     return Response([], status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = ContentSerializer(content, request.data, context={'request':request})
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def patch(self, request, pk, format=None):
+    #       content = self.get_object(pk)
+    #       serializer = ContentSerializer(content, request.data, partial=True)
+
+    #       if serializer.is_valid():
+    #           serializer.save()
+    #           return Response(serializer.data)
+    #       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        content = self.get_object(pk)
+        self.check_object_permissions(request, content)
+        content.delete()
+        #todo delete images from storage
+        return Response(status=status.HTTP_204_NO_CONTENT)
