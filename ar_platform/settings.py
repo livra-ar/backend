@@ -137,7 +137,9 @@ else:
 
 mongoengine.connect(
     db=MONGODB_DATABASES[db]['name'],
-    host=MONGODB_DATABASES[db]['host']
+    username='dbuser',
+    password='lKDrviFTSBqCTskC',
+    host='mongodb+srv://dbuser:lKDrviFTSBqCTskC@cluster0-tvuyt.mongodb.net/test?retryWrites=true&w=majority'
 )
 
 
