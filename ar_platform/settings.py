@@ -36,7 +36,10 @@ SECRET_KEY = 'c$5t)yhkbg=yez8d)+(5rpqvp&29wu&0)9p-gql+-lkj=e%#-y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+'ar-content-platform-backend.herokuapp.com',
+'localhost'
+]
 
 
 # Application definition
