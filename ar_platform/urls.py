@@ -25,6 +25,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework import routers
 # from rest_framework import 
 router = routers.DefaultRouter()
+from django.conf.urls import include, url
 router.register(r'user', UserViewSet, r'user')
 # router.register(r'book', BookViewSet, r'book')
 #router.register(r'content', ContentViewSet, r'content')
@@ -36,6 +37,7 @@ urlpatterns = [
     # path('content/<slug:pk>', ContentDetail.as_view()),
     # path('book/', BookList.as_view()),
     # path('book/<slug:pk>', BookDetail.as_view()),
+    url(r'^api/v1/', include('app.urls')),
     path('user/emails/<email>/', check_email),
     path('auth/',CreatorAuthToken.as_view(), name='api_token_auth'),  # <-- And here
     path('files/delete/<id>/', file_delete_view),

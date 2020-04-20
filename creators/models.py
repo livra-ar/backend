@@ -20,28 +20,6 @@ class Creator(Document):
         max_length=128,
         verbose_name=_('password'),required=True)
 
-    def is_authenticated(self):
-        return True
-
-    def set_password(self, raw_password):
-        """
-        Sets the user's password - always use this rather than directly
-        assigning to :attr:`~mongoengine.django.auth.User.password` as the
-        password is hashed before storage.
-        """
-        self.password = make_password(raw_password)
-        self.save()
-        return self
-
-    def check_password(self, raw_password):
-        """
-        Checks the user's password against a provided password - always use
-        this rather than directly comparing to
-        :attr:`~mongoengine.django.auth.User.password` as the password is
-        hashed before storage.
-        """
-        return check_password(raw_password, self.password)
-
 
 
 class Token(Document):

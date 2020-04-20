@@ -58,14 +58,17 @@ from rest_framework.decorators import authentication_classes, permission_classes
 class BookList(APIView):
     authentication_classes= [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
     def get(self, request, format=None):
         content = Book.objects.all()
         serializer = BookSerializer(content, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+
         if 'id' in request.data.keys():
             del request.data['id'] 
+        
         request.data['publisher'] = request.user
         serializer = BookSerializer(data=request.data,context= {'request' : request})
 
@@ -76,6 +79,7 @@ class BookList(APIView):
 
 class PublisherBooks(APIView):
     authentication_classes= [TokenAuthentication]
+
     def get_objects(self, pk):
         try:
             return Book.objects(publisher=pk)
@@ -157,6 +161,7 @@ class BookDetail(APIView):
 class ContentList(APIView):
     authentication_classes= [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
     def get(self, request, format=None):
         content = Content.objects.all()
         serializer = ContentSerializer(content, many=True)
@@ -190,12 +195,6 @@ class ContentDetail(APIView):
     def put(self, request, pk, format=None):
         content = self.get_object(pk)
         self.check_object_permissions(request, content)
-        # data = request.data
-        # print(data)
-        # try:
-        #     data['book'] = Book.objects.get(id=data['book'])
-        # except Book.DoesNotExist:
-        #     return Response([], status=status.HTTP_400_BAD_REQUEST)
 
         serializer = ContentSerializer(content, request.data, context={'request':request})
 

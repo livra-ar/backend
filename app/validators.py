@@ -3,6 +3,7 @@ from .models import Book
 
 class ValidateBookOwnership(object):
     requires_context = True
+    
     def __call__(self, value, serializer):
         user = serializer.context['request'].user
         book = Book.objects.get(id=value['book'])

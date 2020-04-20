@@ -4,7 +4,13 @@ from .validators import ValidateBookOwnership
 from .models import Content, Book
 from rest_framework.validators import UniqueValidator
 from django.http import Http404
+'''
+ContentSerializer
+ContentWithBookSerializer
+BookWithContentSerializer
+BookSerializer
 
+'''
 class ContentSerializer(mongo_serializers.DocumentSerializer):
     id = serializers.CharField(read_only=True, required=False, validators=[UniqueValidator(queryset=Book.objects.all())])
 
@@ -17,8 +23,7 @@ class ContentSerializer(mongo_serializers.DocumentSerializer):
 
     def to_internal_value(self, data):
         # TODO: Check if publisher can be chaged
-        # if ('request' in self.context.keys()) and not 'creator' not in data:
-        #   data['creator'] = self.context['request'].user; 
+    
         return data
     def update(self,instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
@@ -55,6 +60,7 @@ class ContentSerializer(mongo_serializers.DocumentSerializer):
             creator=creator
         )
         return instance
+
     def to_representation(self, data):
         rep = super(ContentSerializer, self).to_representation(data)
         if 'creator' in rep.keys():
@@ -62,6 +68,7 @@ class ContentSerializer(mongo_serializers.DocumentSerializer):
             rep['creator'].pop('is_confirmed')
             rep['creator'].pop('is_publisher')
             rep['creator'].pop('email')
+
         if 'book' in rep.keys() and 'publisher' in rep['book'].keys():
             rep['book']['publisher'].pop('password')
             rep['book']['publisher'].pop('is_confirmed')

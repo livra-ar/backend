@@ -5,7 +5,7 @@ from creators.models import Creator
 
 class Book(Document):
 	title = fields.StringField(required=True)
-	isbns = fields.ListField(fields.StringField(), required=True)
+	isbns = fields.ListField(fields.StringField(unique=True), required=True)
 	authors = fields.ListField(fields.StringField(), required=True)
 	covers = fields.ListField(fields.StringField(), required=True)
 	publisher = fields.ReferenceField(Creator, reverse_delete_rule=mongoengine.CASCADE,
