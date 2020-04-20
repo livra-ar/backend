@@ -19,8 +19,9 @@ class Creator(Document):
     password = fields.StringField(
         max_length=128,
         verbose_name=_('password'),required=True)
-
-
+    
+    def is_authenticated(self):
+        return True
 
 class Token(Document):
     """
