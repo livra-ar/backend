@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    #'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
     'rest_framework_mongoengine',
@@ -198,5 +198,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_ROOT = '/static/'
+#STATIC_ROOT = '/static/'
 STATIC_URL = '/static/'
