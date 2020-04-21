@@ -1,0 +1,125 @@
+
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready( function () {
+    $('#table_id').DataTable();
+} );
+</script>
+
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="#">Moderation</a>
+&rsaquo; {% if content %} Content {% else %} Book {%endif%} 
+</div>
+{% endblock %}
+{% endif %}
+
+
+{% block content %}
+<div id="content-main">
+
+    <h1>{% if published %} Published{%else%} Unpublished {%endif%} {% if content %} Content {% else %} Books {%endif%} </h1>
+
+    {% if not content and not book %}
+        No {% if published %} published {%else%} unpublished {%endif%} {% if content %} dontent {% else %} books {%endif%} 
+    {% endif %}
+
+    <table id="table_id" class="display">
+        <thead>
+            {% if content %}
+            <tr>
+                <th>Content Name</th>
+                <th>Creator</th>
+                <th>Preview Image</th>
+                <th>File</th>
+                <th>Action</th>
+            </tr>
+            {%else%}
+            <tr>
+                <th>Title</th>
+                <th>Publisher</th>
+                <th>Covers</th>
+                <th>Action</th>
+            </tr>
+
+            {%endif%}
+        </thead>
+        <tbody>
+            {% for c in content %}
+            <tr>
+               
+                <td>{{c.title}}</td>
+                <td>{{c.creator.name}}</td>
+                <td>
+                    {% for img in c.images %}
+                    <a href="{{img}}">View Image #{{forloop.counter}}</a>
+                    {% endfor %}
+                </td>
+                <td><a href="{{c.file}}">View File</a></td>
+                <td>    <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{c.id}}">
+                    <input type="hidden" name="status" value="{% if published %}unpublish{%else%}publish{%endif%}">
+                    <button>{% if published %} Unpublish {%else%} Publish {%endif%}</button>
+                </form></td>
+                
+            
+           
+                <!-- <button type="button">Ignore</button> -->
+            
+            </tr>
+        {% endfor %}
+
+        {% for c in book %}
+        <tr>
+           
+            <td>{{c.title}}</td>
+            <td>{{c.publisher.name}}</td>
+            <td>
+                {% for img in c.covers %}
+                <a href="{{img}}">View Image #{{forloop.counter}}</a>
+                {% endfor %}
+            </td>
+            
+            <td>    <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{c.id}}">
+                <input type="hidden" name="status" value="{% if published %}unpublish{%else%}publish{%endif%}">
+                <button>{% if published %} Unpublish {%else%} Publish {%endif%}</button>
+            </form></td>
+            
+        
+       
+            <!-- <button type="button">Ignore</button> -->
+        
+        </tr>
+    {% endfor %}
+   
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+   
+</div>
+{% endblock %}
+
+

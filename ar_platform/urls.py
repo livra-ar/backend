@@ -24,11 +24,33 @@ from django.conf.urls import include, url
 from rest_framework.authtoken.views import obtain_auth_token 	
 from rest_framework import routers
 # from rest_framework import 
+from moderators.views import *
 router = routers.DefaultRouter()
 from django.conf.urls import include, url
 router.register(r'user', UserViewSet, r'user')
 # router.register(r'book', BookViewSet, r'book')
 #router.register(r'content', ContentViewSet, r'content')
+
+
+
+_admin_site_get_urls = admin.site.get_urls
+
+def get_urls():        
+    from django.conf.urls import url
+    urls = _admin_site_get_urls()
+    urls += [
+            url(r'^published-content-list/$',
+                 admin.site.admin_view(list_published_content)),
+            url(r'^unpublished-content-list/$',
+            admin.site.admin_view(list_unpublished_content)),
+               url(r'^published-book-list/$',
+                 admin.site.admin_view(list_published_book)),
+            url(r'^unpublished-book-list/$',
+            admin.site.admin_view(list_unpublished_book)),
+        ]
+    return urls
+
+admin.site.get_urls = get_urls
 
 urlpatterns = [
     
@@ -37,6 +59,9 @@ urlpatterns = [
     # path('content/<slug:pk>', ContentDetail.as_view()),
     # path('book/', BookList.as_view()),
     # path('book/<slug:pk>', BookDetail.as_view()),
+    # url(r'^admin/', include('moderators.urls')),
+
+    path('admin/', admin.site.urls),
     url(r'^api/v1/', include('app.urls')),
     path('user/emails/<email>/', check_email),
     path('auth/',CreatorAuthToken.as_view(), name='api_token_auth'),  # <-- And here
