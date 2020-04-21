@@ -84,7 +84,7 @@ def list_published_content(request):
                 return HttpResponseNotFound()
             return HttpResponseRedirect('/admin/published-content-list')
     else:
-        content = Content.objects(active=False)
+        content = Content.objects(active=True)
         return render(request, 'list.html', {'content' : content, 'published': True})
 
 def list_published_book(request):
