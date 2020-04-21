@@ -12,7 +12,7 @@ from mongoengine import fields, Document, ImproperlyConfigured
 
 # Create your models here.
 class Creator(Document):    
-    email = fields.EmailField(unique=True)
+    email = fields.EmailField(unique=True, required=True)
     is_publisher = fields.BooleanField(default=True)
     is_confirmed = fields.BooleanField(default=False)
     name = fields.StringField(required=True)
