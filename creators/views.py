@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework_mongoengine import viewsets
 from rest_framework import parsers, renderers
 import time
+from django.http import Http404
 from .serializers import *
 from .models import Token, Creator
 from .authentication import TokenAuthentication
