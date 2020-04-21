@@ -126,13 +126,13 @@ class BookDetail(APIView):
     
     def get_active_object(self, pk, request):
         try:
-            content = Content.objects.get(id=pk)
-            if content:
-                if content.creator != request.user and not content.active:
+            book = Book.objects.get(id=pk)
+            if book:
+                if book.publisher != request.user and not book.active:
                     return Http404
                 else:
-                    return content      
-        except Content.DoesNotExist:
+                    return book
+        except Book.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
