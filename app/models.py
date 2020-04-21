@@ -11,7 +11,7 @@ class Book(Document):
 	publisher = fields.ReferenceField(Creator, reverse_delete_rule=mongoengine.CASCADE,
 		required=False, read_only=True)
 	content =  fields.ListField(fields.ReferenceField('Content'), required=False)
-
+	active = fields.BooleanField(default=True)
 class Content(Document):
 	title = fields.StringField(required=True)
 	description  =fields.StringField(required=True)
@@ -19,4 +19,4 @@ class Content(Document):
 	file  = fields.StringField(required=True)
 	creator = fields.ReferenceField(Creator, read_only=True)
 	book = fields.ReferenceField('Book',required=True, reverse_delete_rule=mongoengine.CASCADE)
-	active = fields.BooleanField(default=False)
+	active = fields.BooleanField(default=True)

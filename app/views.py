@@ -123,10 +123,21 @@ class BookDetail(APIView):
             return Book.objects.get(id=pk)
         except Book.DoesNotExist:
             raise Http404
+    
+    def get_active_object(self, pk, request):
+        try:
+            content = Content.objects.get(id=pk)
+            if content:
+                if content.creator != request.user and not content.active:
+                    return Http404
+                else:
+                    return content      
+        except Content.DoesNotExist:
+            raise Http404
 
     def get(self, request, pk, format=None):
         try:
-            book = self.get_object(pk)
+            book = self.get_active_object(pk)
         except:
             raise Http404
         serializer = BookSerializer(book)
@@ -186,9 +197,20 @@ class ContentDetail(APIView):
             return Content.objects.get(id=pk)
         except Content.DoesNotExist:
             raise Http404
+    
+    def get_active_object(self, pk, request):
+        try:
+            content = Content.objects.get(id=pk)
+            if content:
+                if content.creator != request.user and not content.active:
+                    return Http404
+                else:
+                    return content      
+        except Content.DoesNotExist:
+            raise Http404
 
     def get(self, request, pk, format=None):
-        content = self.get_object(pk)
+        content = self.get_active_object(pk, request)
         serializer = ContentSerializer(content)
         return Response(serializer.data)
 
