@@ -22,9 +22,7 @@ def zip_upload_view(request, filename, format=None):
     # TODO: Use UUID
     result = cloudinary.uploader.upload(file_obj, resource_type='auto', public_id='%s.zip' % binascii.hexlify(os.urandom(20)).decode())
     # do some stuff with uploaded file
-    result = {
-    'url' :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Placeholder_book.svg/792px-Placeholder_book.svg.png'
-    }
+  
     data = {
         'url': result['url']
     }
@@ -39,7 +37,7 @@ def image_upload_view(request, filename, format=None):
     # TODO: Use UUID
     result = cloudinary.uploader.upload(file_obj, resource_type='auto')
     # do some stuff with uploaded file
-    print(result)
+    #print(result)
     # result = {
     # 'url' :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Placeholder_book.svg/792px-Placeholder_book.svg.png'
     # }
