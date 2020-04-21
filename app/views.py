@@ -129,7 +129,7 @@ class BookDetail(APIView):
             book = Book.objects.get(id=pk)
             if book:
                 if book.publisher != request.user and not book.active:
-                    return Http404
+                    raise Http404
                 else:
                     return book
         except Book.DoesNotExist:
