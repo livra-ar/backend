@@ -8,12 +8,14 @@ dataclasses==0.6
 decorator==4.4.2
 Django==3.0.4
 django-cors-headers==3.2.1
+django-mongonaut==0.2.21
 django-rest-framework-mongoengine==3.4.1
 djangorestframework==3.11.0
 dnspython==1.16.0
 kiwisolver==1.2.0
 mongoengine==0.19.1
 networkx==2.4
+psycopg2==2.8.5
 pyparsing==2.4.7
 python-dateutil==2.8.1
 pytz==2019.3
@@ -21,4 +23,3 @@ six==1.14.0
 sqlparse==0.2.4
 toolz==0.10.0
 urllib3==1.25.8
-gunicorn
