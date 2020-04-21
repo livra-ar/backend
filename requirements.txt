@@ -8,7 +8,6 @@ dataclasses==0.6
 decorator==4.4.2
 Django==3.0.4
 django-cors-headers==3.2.1
-django-mongonaut==0.2.21
 django-rest-framework-mongoengine==3.4.1
 djangorestframework==3.11.0
 dnspython==1.16.0
