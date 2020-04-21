@@ -26,7 +26,7 @@ class CreatorAuthToken(ObtainAuthToken):
             token.save()
 
         return Response({
-            'id': user.id,
+            'id': str(user.id),
             'name': user.name,
             'token': token.key
         })
