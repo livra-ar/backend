@@ -137,7 +137,7 @@ class BookDetail(APIView):
 
     def get(self, request, pk, format=None):
         try:
-            book = self.get_active_object(pk)
+            book = self.get_active_object(pk, request)
         except:
             raise Http404
         serializer = BookSerializer(book)
