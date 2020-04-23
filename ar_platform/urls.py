@@ -57,7 +57,7 @@ urlpatterns = [
     # path(r'api/', )),	
     # path('content/', ContentList.as_view()),
     # path('content/<slug:pk>', ContentDetail.as_view()),
-    # path('book/', BookList.as_view()),
+    path('books/', BookList.as_view()),
     # path('book/<slug:pk>', BookDetail.as_view()),
     # url(r'^admin/', include('moderators.urls')),
 
@@ -68,6 +68,7 @@ urlpatterns = [
     path('files/delete/<id>/', file_delete_view),
     path('upload/raw/<slug:filename>', zip_upload_view),
     path('upload/img/<slug:filename>', image_upload_view),
+    path('api/book/by-isbn/<slug:isbn>', book_by_isbn),
     path('book/<slug:pk>', BookDetail.as_view()),
     path('book/', BookList.as_view()),
     path('publisher/books/', PublisherBooks.as_view()),

@@ -77,6 +77,10 @@ class ContentSerializer(mongo_serializers.DocumentSerializer):
         #re.pop('password')
         return rep
 
+class ContentShallowSerializer(ContentSerializer):
+    class Meta:
+        model =  Content
+        fields = ['id', 'title', 'description', 'images', 'file']
 class BookSerializer(mongo_serializers.DocumentSerializer):
     id = serializers.CharField(read_only=True, required=False)
 
@@ -119,4 +123,22 @@ class BookSerializer(mongo_serializers.DocumentSerializer):
             publisher=publisher
         )
       
+        return instance
+
+class BookDeepSerializer(BookSerializer):
+    def to_representation(self, data):
+        rep = super(BookSerializer, self).to_representation(data)
+        content = Content.objects(book=rep['id'],active=True)
+        content_serializer = ContentShallowSerializer(content, many=True)
+        content = content_serializer.data
+        rep['content'] = content
+        if 'publisher' in rep.keys():
+            if rep['publisher']:
+                rep['publisher'].pop('password')
+                rep['publisher'].pop('is_confirmed')
+                rep['publisher'].pop('is_publisher')
+                rep['publisher'].pop('email')
+        #re.pop('password')
+        return rep
+
         return instance

@@ -10,7 +10,6 @@ class Book(Document):
 	covers = fields.ListField(fields.StringField(), required=True)
 	publisher = fields.ReferenceField(Creator, reverse_delete_rule=mongoengine.CASCADE,
 		required=False, read_only=True)
-	content =  fields.ListField(fields.ReferenceField('Content'), required=False)
 	active = fields.BooleanField(default=True)
 class Content(Document):
 	title = fields.StringField(required=True)

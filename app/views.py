@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, mixins, permissions#, authentication
 from .permissions import IsOwnerOfBookOrReadOnly, IsOwnerOfContentOrReadOnly
-from .serializers import ContentSerializer, BookSerializer
+from .serializers import ContentSerializer, BookSerializer, BookDeepSerializer
 from .models import Content, Book
 from creators.authentication import TokenAuthentication
 from rest_framework_mongoengine import viewsets
@@ -90,6 +90,18 @@ class PublisherBooks(APIView):
         books = self.get_objects(request.user)
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([permissions.AllowAny])
+def book_by_isbn(request, isbn, format=None):
+    isbn = isbn.replace('-', '')
+    try:
+        book = Book.objects.get(isbns=isbn, active=True)
+        serializer = BookDeepSerializer(book)
+        return Response(serializer.data)
+    except Book.DoesNotExist:
+         return Response(None, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
