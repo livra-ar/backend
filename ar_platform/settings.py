@@ -104,6 +104,7 @@ WSGI_APPLICATION = 'ar_platform.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+        # 'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'd8f4ccoc8cg552',
         'USER': 'yrbpmcnnvitdjr',
         'PASSWORD': '651957d666616702e7315ba09a262b51dcd9b2007a6ad590d103df65d1fbb5f2',
@@ -115,14 +116,14 @@ DATABASES = {
 
 MONGODB_DATABASES = {
     "default": {
-        "name": "ar_platform",
+        "name": "test",
         "host": "localhost",
         "port": 27017,
         "tz_aware": True,  # if you use timezones in django (USE_TZ = True)
     },
 
     "test": {
-        "name": "test_ar_platform",
+        "name": "automated_tests",
         "host": "localhost",
         "port": 27017,
         "tz_aware": True,  # if you use timezones in django (USE_TZ = True)
@@ -139,7 +140,7 @@ def is_test():
         print("Using a test mongo database")
         return True
     else:
-        print("Using a default mongo database")
+        # print("Using a default mongo database")
         return False
 
 if is_test():
@@ -149,10 +150,9 @@ else:
 
 mongoengine.connect(
     db=MONGODB_DATABASES[db]['name'],
-    # host="localhost"
     username='dbuser',
     password='lKDrviFTSBqCTskC',
-    host='mongodb+srv://dbuser:lKDrviFTSBqCTskC@cluster0-tvuyt.mongodb.net/test?retryWrites=true&w=majority'
+    host='mongodb+srv://dbuser:lKDrviFTSBqCTskC@cluster0-tvuyt.mongodb.net/'+ MONGODB_DATABASES[db]['name'] +'?retryWrites=true&w=majority'
 )
 
 

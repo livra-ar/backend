@@ -24,7 +24,7 @@ def zip_upload_view(request, filename, format=None):
     # do some stuff with uploaded file
   
     data = {
-        'url': result['url']
+        'url': result['secure_url']
     }
     return Response(data, status=201)
 
@@ -42,7 +42,7 @@ def image_upload_view(request, filename, format=None):
     # 'url' :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Placeholder_book.svg/792px-Placeholder_book.svg.png'
     # }
     data = {
-        'url': result['url']
+        'url': result['secure_url']
     }
     return Response(data, status=201)
 
