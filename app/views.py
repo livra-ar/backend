@@ -101,7 +101,9 @@ def book_by_isbn(request, isbn, format=None):
         serializer = BookDeepSerializer(book)
         return Response(serializer.data)
     except Book.DoesNotExist:
-         return Response(None, status=status.HTTP_404_NOT_FOUND)
+         return Response({
+             'error': 'Not Found'
+         }, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
