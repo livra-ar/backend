@@ -20,7 +20,7 @@ from creators.authentication import TokenAuthentication
 def zip_upload_view(request, filename, format=None):
     file_obj = request.FILES['file']
     # TODO: Use UUID
-    result = cloudinary.uploader.upload(file_obj, resource_type='auto', public_id='%s.zip' % binascii.hexlify(os.urandom(20)).decode())
+    result = cloudinary.uploader.upload(file_obj, resource_type='auto')
     # do some stuff with uploaded file
   
     data = {
