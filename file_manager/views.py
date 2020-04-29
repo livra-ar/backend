@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 # Create your views here.
 import cloudinary
+import pathlib
 from rest_framework import permissions
 from rest_framework.decorators import api_view
 from rest_framework.decorators import parser_classes
@@ -19,8 +20,8 @@ from creators.authentication import TokenAuthentication
 @permission_classes([permissions.IsAuthenticated])
 def zip_upload_view(request, filename, format=None):
     file_obj = request.FILES['file']
-    # TODO: Use UUID
-    result = cloudinary.uploader.upload(file_obj, resource_type='auto')
+    extension = ''.join(pathlib.Path(filename).suffixes)
+    result = cloudinary.uploader.upload(file_obj, resource_type='auto',public_id='%s.%s' % (binascii.hexlify(os.urandom(20)).decode(), extension))
     # do some stuff with uploaded file
   
     data = {
