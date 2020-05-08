@@ -41,7 +41,7 @@ class UserViewSet(mixins.CreateModelMixin,
     def get_queryset(self):
         return Creator.objects.all()
     def create(self, request, *args, **kwargs):
-        ''' I wanted to do some stuff with serializer.data here '''
+        request.data['email'] = request.data['email'].lower()
         request.data['password'] = make_password(request.data['password'])
         return super(UserViewSet, self).create(request, *args, **kwargs)
 
@@ -49,6 +49,7 @@ class UserViewSet(mixins.CreateModelMixin,
 @permission_classes([permissions.AllowAny])
 def check_email(request, email, format=None):
     try:
+        email = email.lower()
         creator = Creator.objects.get(email=email)
         return Response(email)
     except Creator.DoesNotExist:

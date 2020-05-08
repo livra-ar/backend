@@ -10,7 +10,7 @@ class AuthTokenSerializer(serializers.Serializer):
     password = serializers.CharField(label=_('Password'), style={'input_type': 'password'})
 
     def validate(self, attrs):
-        email = attrs.get('email')
+        email = lower(attrs.get('email'))
         password= attrs.get('password')
 
         if email and password:

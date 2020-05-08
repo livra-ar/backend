@@ -20,7 +20,7 @@ from creators.authentication import TokenAuthentication
 @permission_classes([permissions.IsAuthenticated])
 def zip_upload_view(request, filename, format=None):
     file_obj = request.FILES['file']
-    extension = ''.join(pathlib.Path(filename).suffixes)
+    extension = ''.join(pathlib.Path(file_obj.name).suffixes)
     result = cloudinary.uploader.upload(file_obj, resource_type='raw',public_id='%s.%s' % (binascii.hexlify(os.urandom(20)).decode(), extension))
     # do some stuff with uploaded file
   
