@@ -80,7 +80,7 @@ class ContentSerializer(mongo_serializers.DocumentSerializer):
 class ContentShallowSerializer(ContentSerializer):
     class Meta:
         model =  Content
-        fields = ['id', 'title', 'description', 'images', 'file']
+        fields = ['id', 'title', 'description', 'images', 'file', 'size']
 class BookSerializer(mongo_serializers.DocumentSerializer):
     id = serializers.CharField(read_only=True, required=False)
 

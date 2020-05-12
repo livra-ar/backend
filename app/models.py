@@ -19,3 +19,4 @@ class Content(Document):
 	creator = fields.ReferenceField(Creator, read_only=True)
 	book = fields.ReferenceField('Book',required=True, reverse_delete_rule=mongoengine.CASCADE)
 	active = fields.BooleanField(default=True)
+	size = fields.IntField(default=4000)
