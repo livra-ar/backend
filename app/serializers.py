@@ -86,7 +86,7 @@ class BookSerializer(mongo_serializers.DocumentSerializer):
 
     class Meta:
         model = Book
-        fields = '__all__'
+        fields = ['id', 'covers','title', 'isbns', 'authors', 'active', 'publisher']
         read_only_fields = ['publisher']
         depth=2
 

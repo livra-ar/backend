@@ -111,9 +111,10 @@ def book_by_isbn(request, isbn, format=None):
 def books_by_title(request, format=None):
     if 'title' not in request.data.keys():
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
+    
     title = request.data['title']
     try:
-        book = Book.objects(active=True).search_text(title).order_by('$text_score')
+        book = Book.objects(active=True,).search_text(title).order_by('$text_score')
         serializer = BookDeepSerializer(book, many=True)
         return Response(serializer.data)
     except Book.DoesNotExist:
