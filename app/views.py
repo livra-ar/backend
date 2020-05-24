@@ -108,9 +108,10 @@ def book_by_isbn(request, isbn, format=None):
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([permissions.AllowAny])
-def books_by_title(request, title, format=None):
+def books_by_title(request, format=None):
+    title = request.data['title']
     try:
-        book = Book.objects(active=True).search_text(title)
+        book = Book.objects(active=True).search_text(title).order_by('$text_score')
         serializer = BookDeepSerializer(book, many=True)
         return Response(serializer.data)
     except Book.DoesNotExist:
