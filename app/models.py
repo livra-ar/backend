@@ -11,6 +11,12 @@ class Book(Document):
 	publisher = fields.ReferenceField(Creator, reverse_delete_rule=mongoengine.CASCADE,
 		required=False, read_only=True)
 	active = fields.BooleanField(default=True)
+
+	meta = {'indexes': [
+        {'fields': ['$title'],
+         'default_language': 'english',
+        }
+    ]}
 class Content(Document):
 	title = fields.StringField(required=True)
 	description  =fields.StringField(required=True)
