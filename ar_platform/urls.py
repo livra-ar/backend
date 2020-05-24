@@ -69,6 +69,7 @@ urlpatterns = [
     path('upload/raw/<slug:filename>', zip_upload_view),
     path('upload/img/<slug:filename>', image_upload_view),
     path('api/book/by-isbn/<slug:isbn>', book_by_isbn),
+     path('api/book/by-title/', books_by_title),
     path('book/<slug:pk>', BookDetail.as_view()),
     path('book/', BookList.as_view()),
     path('publisher/books/', PublisherBooks.as_view()),

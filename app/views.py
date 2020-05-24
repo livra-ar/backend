@@ -105,6 +105,22 @@ def book_by_isbn(request, isbn, format=None):
              'error': 'Not Found'
          }, status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([permissions.AllowAny])
+def books_by_title(request, format=None):
+    if 'title' not in request.data.keys():
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+    title = request.data['title']
+    try:
+        book = Book.objects(active=True).search_text(title).order_by('$text_score')
+        serializer = BookDeepSerializer(book, many=True)
+        return Response(serializer.data)
+    except Book.DoesNotExist:
+         return Response({
+             'error': 'Not Found'
+         }, status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
@@ -115,6 +131,7 @@ def creator_content(request, format=None):
         return Response(serializer.data)
     except Content.DoesNotExist:
         raise Http404
+
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
