@@ -109,7 +109,6 @@ def book_by_isbn(request, isbn, format=None):
 @authentication_classes([TokenAuthentication])
 @permission_classes([permissions.AllowAny])
 def books_by_title(request, format=None):
-    print(request.data)
     if 'title' not in request.data.keys():
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
     title = request.data['title']
