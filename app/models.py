@@ -3,10 +3,6 @@ import mongoengine
 from mongoengine import fields, Document, ImproperlyConfigured
 from creators.models import Creator
 def make_ngrams(word, min_size=2):
-    """
-    basestring       word: word to split into ngrams
-           int   min_size: minimum size of ngrams
-    """
     length = len(word)
     size_range = range(min_size, max(length, min_size) + 1)
     return list(set(

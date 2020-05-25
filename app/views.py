@@ -116,7 +116,7 @@ def books_by_title(request, format=None):
     try:
         book = Book.objects(active=True,).search_text(title).order_by('$text_score')
         serializer = BookDeepSerializer(book, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, header= {'Cache-Control': 'no-cache'})
     except Book.DoesNotExist:
          return Response({
              'error': 'Not Found'
