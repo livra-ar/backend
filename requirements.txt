@@ -23,4 +23,5 @@ sqlparse==0.2.4
 toolz==0.10.0
 urllib3==1.25.8
 gunicorn
+mongomock
 whitenoise
