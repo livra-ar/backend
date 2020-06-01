@@ -73,9 +73,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'ar_platform.urls'
 
@@ -103,8 +103,8 @@ WSGI_APPLICATION = 'ar_platform.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'd8f4ccoc8cg552',
         'USER': 'yrbpmcnnvitdjr',
         'PASSWORD': '651957d666616702e7315ba09a262b51dcd9b2007a6ad590d103df65d1fbb5f2',
@@ -145,15 +145,21 @@ def is_test():
 
 if is_test():
     db = 'test'
+    mongoengine.connect(
+        'testdb',
+        host='mongomock://localhost'
+        )
+    conn = mongoengine.get_connection()
 else:
     db = 'default'
-
-mongoengine.connect(
+    mongoengine.connect(
     db=MONGODB_DATABASES[db]['name'],
     username='dbuser',
     password='lKDrviFTSBqCTskC',
     host='mongodb+srv://dbuser:lKDrviFTSBqCTskC@cluster0-tvuyt.mongodb.net/'+ MONGODB_DATABASES[db]['name'] +'?retryWrites=true&w=majority'
 )
+
+
 
 
 # Password validation
