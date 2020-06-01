@@ -10,10 +10,10 @@ class GetContentTest(TestCase):
     '''Test Module for GET content API'''
 
     def setUp(self):
-          creator = Creator.objects.create(
-            email='user@example.com',
-            name='User',
-            password=make_password('password')
+        creator = Creator.objects.create(
+        email='user@example.com',
+        name='User',
+        password=make_password('password')
         )
 
         book = Book.objects.create(
