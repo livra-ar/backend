@@ -1,59 +1,13 @@
-# # 
-# from rest_framework_mongoengine.viewsets import ModelViewSet as MongoModelViewSet
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, mixins, permissions#, authentication
+from rest_framework import status, mixins, permissions
 from .permissions import IsOwnerOfBookOrReadOnly, IsOwnerOfContentOrReadOnly
 from .serializers import ContentSerializer, BookSerializer, BookDeepSerializer
 from .models import Content, Book
 from creators.authentication import TokenAuthentication
 from rest_framework_mongoengine import viewsets
 from rest_framework.decorators import authentication_classes, permission_classes,api_view
-
-# class BookViewSet(
-#                     mixins.ListModelMixin,
-#                     mixins.CreateModelMixin,
-#                     mixins.RetrieveModelMixin,
-#                     mixins.UpdateModelMixin,
-#                     mixins.DestroyModelMixin,
-#                     viewsets.GenericViewSet
-#     ):
-    
-#     authentication_classes= [TokenAuthentication]
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOfBookOrReadOnly)
-#     serializer_class = BookSerializer
-#     def perform_create(self, serializer):
-#         serializer.save(publisher=self.request.user)
-
-#     def post(self, request, *args, **kwargs):
-#         if 'id' in request.data.keys():
-#             del request.data['id']
-#         self.create(self, request, args, kwargs)
-
-#     def get_queryset(self):
-#         return Book.objects.all()
-
-# class ContentViewSet(
-#                     mixins.ListModelMixin,
-#                     mixins.CreateModelMixin,
-#                     mixins.RetrieveModelMixin,
-#                     mixins.UpdateModelMixin,
-#                     mixins.DestroyModelMixin,
-#                     viewsets.GenericViewSet
-#     ):
-    
-#     authentication_classes= [TokenAuthentication]
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOfContentOrReadOnly)
-#     serializer_class = ContentSerializer
-
-#     def post(self, request, *args, **kwargs):
-#         if 'id' in request.data.keys(): 
-#             del request.data['id']
-#         self.create(self, request, args, kwargs)
-
-#     def get_queryset(self):
-#         return Content.objects.all()
 
 class BookList(APIView):
     authentication_classes= [TokenAuthentication]

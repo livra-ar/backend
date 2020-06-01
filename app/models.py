@@ -2,6 +2,7 @@
 import mongoengine
 from mongoengine import fields, Document, ImproperlyConfigured
 from creators.models import Creator
+
 def make_ngrams(word, min_size=2):
     length = len(word)
     size_range = range(min_size, max(length, min_size) + 1)
@@ -44,3 +45,4 @@ class Content(Document):
 	book = fields.ReferenceField('Book',required=True, reverse_delete_rule=mongoengine.CASCADE)
 	active = fields.BooleanField(default=True)
 	size = fields.IntField(default=4000)
+	animated = fields.BooleanField(default=False)

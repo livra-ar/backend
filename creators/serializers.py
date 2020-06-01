@@ -31,6 +31,12 @@ class AuthTokenSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+class ShallowCreatorSerializer(DocumentSerializer):
+    id = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Creator
+        fields = ['id', 'name']
 
 class UserSerializer(DocumentSerializer):
     id = serializers.CharField(read_only=True)

@@ -2,7 +2,10 @@ from rest_framework import permissions
 from .models import Book, Content
 
 class IsOwnerOfBookOrReadOnly(permissions.BasePermission):
-
+	'''
+	Permission class to ensure that books are readonly
+	to users who do not own them
+	'''
 	def has_object_permission(self, request, view, object):
 		if request.method in permissions.SAFE_METHODS:
 			return True
@@ -16,6 +19,10 @@ class IsOwnerOfBookOrReadOnly(permissions.BasePermission):
 		return True
 
 class IsOwnerOfContentOrReadOnly(permissions.BasePermission):
+	'''
+	Permission class to ensure that content are readonly to
+	users who do not own them
+	'''
 	def has_object_permission(self, request, view, object):
 		if request.method in permissions.SAFE_METHODS:
 			return True
