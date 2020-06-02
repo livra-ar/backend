@@ -21,17 +21,17 @@ class ValidateBookOwnershipTest(TestCase):
     def setUp(self):
 
         self.creator1 = Creator(
-        email='user2@example.com',
-        name='User',
-        password='password'
+            email='user2@example.com',
+            name='User',
+            password='password'
         )
 
         self.creator1.save()
 
         self.creator2 = Creator(
-        email='user3@example.com',
-        name='User2',
-        password='password'
+            email='user3@example.com',
+            name='User2',
+            password='password'
         )
 
         self.book = Book(
@@ -40,7 +40,6 @@ class ValidateBookOwnershipTest(TestCase):
             isbns=['111111111111'],
             covers=['http://www.example.com/cover.png'],
             publisher=self.creator1,
-
         )
 
         self.book.save()

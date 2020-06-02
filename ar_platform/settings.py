@@ -199,6 +199,7 @@ DEFAULT_AUTHENTICATION_CLASSES = (
     'rest_framework.authentication.SessionAuthentication',
 )
 
+
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 

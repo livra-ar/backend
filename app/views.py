@@ -167,7 +167,15 @@ class ContentList(APIView):
     def post(self, request, format=None):
         if 'id' in request.data.keys():
             del request.data['id'] 
-        request.data['creator'] = request.user
+        request.data['creator'] = request.user.__dict__
+        try:
+            book = self.get_active_object(pk, request)
+        except:
+            raise Http404
+        request.data['book']  = book.__dict__
+        
+            
+            
         serializer = ContentSerializer(data=request.data,context= {'request' : request})
         if serializer.is_valid():
             serializer.save()
@@ -203,9 +211,13 @@ class ContentDetail(APIView):
     def put(self, request, pk, format=None):
         content = self.get_object(pk)
         self.check_object_permissions(request, content)
-
+        try:
+            book = self.get_active_object(pk, request)
+        except:
+            raise Http404
+        request.data['book']  = book.__dict__
         serializer = ContentSerializer(content, request.data, context={'request':request})
-
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
