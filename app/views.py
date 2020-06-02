@@ -169,8 +169,8 @@ class ContentList(APIView):
             del request.data['id'] 
         request.data['creator'] = request.user.__dict__
         try:
-            book = self.get_active_object(pk, request)
-        except:
+            return Book.objects.get(id=pk)
+        except Book.DoesNotExist:
             raise Http404
         request.data['book']  = book.__dict__
         
@@ -212,8 +212,8 @@ class ContentDetail(APIView):
         content = self.get_object(pk)
         self.check_object_permissions(request, content)
         try:
-            book = self.get_active_object(pk, request)
-        except:
+            return Book.objects.get(id=pk)
+        except Book.DoesNotExist:
             raise Http404
         request.data['book']  = book.__dict__
         serializer = ContentSerializer(content, request.data, context={'request':request})
