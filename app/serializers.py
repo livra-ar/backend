@@ -105,7 +105,7 @@ class ContentShallowSerializer(serializers.Serializer):
     active = serializers.BooleanField()
     animated = serializers.BooleanField()
     size = serializers.IntegerField()
-
+    creator = CreatorShallowField()
 
 class BookDeepSerializer(BookSerializer):
     def to_representation(self, data):
