@@ -9,7 +9,7 @@ from creators.authentication import TokenAuthentication
 from rest_framework_mongoengine import viewsets
 from rest_framework.decorators import authentication_classes, permission_classes,api_view
 from pathlib import Path
-
+import cloudinary
 
 class BookList(APIView):
     authentication_classes= [TokenAuthentication]
