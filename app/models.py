@@ -34,15 +34,15 @@ class Book(Document):
 		for word in self.title.split():
 			ngrams.extend(make_ngrams(word))
 		self.ngrams = ' '.join(ngrams)
-		super(Book, self).save(*args, **kwargs)
+		return super(Book, self).save(*args, **kwargs)
 
 class Content(Document):
 	title = fields.StringField(required=True)
 	description  =fields.StringField(required=True)
-	images = fields.ListField(fields.StringField(required=True))
+	images = fields.ListField(fields.StringField(required=True), required=True)
 	file  = fields.StringField(required=True)
 	creator = fields.ReferenceField(Creator, read_only=True)
-	book = fields.ReferenceField('Book',required=True, reverse_delete_rule=mongoengine.CASCADE)
+	book = fields.ReferenceField(Book, required=True, reverse_delete_rule=mongoengine.CASCADE)
 	active = fields.BooleanField(default=True)
 	size = fields.IntField(default=4000)
 	animated = fields.BooleanField(default=False)
