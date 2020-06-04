@@ -65,7 +65,7 @@ urlpatterns = [
     url(r'^api/v1/', include('app.urls')),
     path('user/emails/<email>/', check_email),
     path('auth/',CreatorAuthToken.as_view(), name='api_token_auth'),  # <-- And here
-    path('files/delete/<id>/', file_delete_view),
+    path('files/delete/<slug:id>/', file_delete_view),
     path('upload/raw/<slug:filename>', zip_upload_view),
     path('upload/img/<slug:filename>', image_upload_view),
     path('api/book/by-isbn/<slug:isbn>', book_by_isbn),

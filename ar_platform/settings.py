@@ -154,6 +154,7 @@ else:
     db = 'default'
     mongoengine.connect(
     db=MONGODB_DATABASES[db]['name'],
+    # host ='localhost'
     username='dbuser',
     password='lKDrviFTSBqCTskC',
     host='mongodb+srv://dbuser:lKDrviFTSBqCTskC@cluster0-tvuyt.mongodb.net/'+ MONGODB_DATABASES[db]['name'] +'?retryWrites=true&w=majority'
@@ -199,6 +200,10 @@ DEFAULT_AUTHENTICATION_CLASSES = (
     'rest_framework.authentication.SessionAuthentication',
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'

@@ -5,6 +5,13 @@ from rest_framework import serializers
 from rest_framework_mongoengine.serializers import DocumentSerializer
 from .models import Creator
 
+class SubCreatorSerializer(DocumentSerializer):
+    id = serializers.CharField(read_only=True)
+    class Meta:
+        model = Creator
+        fields = ['id']
+        read_only_fields = ['id']
+
 class AuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField(label=_('Email'))
     password = serializers.CharField(label=_('Password'), style={'input_type': 'password'})
