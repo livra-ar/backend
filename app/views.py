@@ -83,7 +83,7 @@ class BookDetail(APIView):
     def delete(self, request, pk, format=None):
         book = self.get_object(pk)
         self.check_object_permissions(request, book)
-        for image in content.covers:
+        for image in book.covers:
             path = Path(image)
             id = path.name.replace(path.suffix, '')
             cloudinary.uploader.destroy(public_id=id)
