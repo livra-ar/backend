@@ -23,9 +23,9 @@ def zip_upload_view(request, filename, format=None):
     extension = pathlib.Path(file_obj.name).suffix
     result = cloudinary.uploader.upload(file_obj, resource_type='raw',public_id='%s%s' % (binascii.hexlify(os.urandom(20)).decode(), extension))
     # do some stuff with uploaded file
-    # result = {
-    # 'secure_url' :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Placeholder_book.svg/792px-Placeholder_book.svg.png'
-    # }
+    result = {
+    'secure_url' :'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Placeholder_book.svg/792px-Placeholder_book.svg.png'
+    }
     data = {
         'url': result['secure_url']
     }
@@ -46,7 +46,7 @@ def image_upload_view(request, filename, format=None):
     data = {
         'url': result['secure_url']
     }
-    return Response(data, status=204)
+    return Response(data, status=201)
 
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
