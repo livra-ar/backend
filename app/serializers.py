@@ -47,6 +47,7 @@ class BookSerializer(serializers.Serializer):
         isbns = validated_data.get('isbns', instance.isbns)
         authors = validated_data.get('authors', instance.authors)
         covers = validated_data.get('covers', instance.covers)
+        instance.save()
         return instance
 
     
@@ -92,7 +93,8 @@ class ContentSerializer(serializers.Serializer):
         instance.file = validated_data.get('file', instance.file)
         instance.book = validated_data.get('book', instance.book)
         instance.animated = validated_data.get('animated', instance.animated)
-        instance.size = validated_data.get('size', instance.size);
+        instance.size = validated_data.get('size', instance.size)
+        instance.save()
         return instance
 
 class ContentShallowSerializer(serializers.Serializer):
