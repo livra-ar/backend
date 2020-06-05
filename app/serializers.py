@@ -17,7 +17,6 @@ class BookSerializer(serializers.Serializer):
     active = serializers.BooleanField(read_only=True)
     publisher = CreatorShallowField(read_only=True)
     covers = serializers.ListField(child=serializers.URLField(), allow_empty=False)
-    active = serializers.BooleanField(required=False)
     
     def create(self, validated_data):
         title = validated_data['title']
