@@ -93,7 +93,6 @@ class ContentSerializer(serializers.Serializer):
         instance.book = validated_data.get('book', instance.book)
         instance.animated = validated_data.get('animated', instance.animated)
         instance.size = validated_data.get('size', instance.size);
-        instance.save()
         return instance
 
 class ContentShallowSerializer(serializers.Serializer):
