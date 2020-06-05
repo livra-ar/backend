@@ -42,10 +42,10 @@ class BookSerializer(serializers.Serializer):
             raise serializers.ValidationError('Invalid publisher id')
 
     def update(self, instance, validated_data):
-        title = validated_data.get('title', instance.title)
-        isbns = validated_data.get('isbns', instance.isbns)
-        authors = validated_data.get('authors', instance.authors)
-        covers = validated_data.get('covers', instance.covers)
+        instance.title = validated_data.get('title', instance.title)
+        instance.isbns = validated_data.get('isbns', instance.isbns)
+        instance.authors = validated_data.get('authors', instance.authors)
+        instance.covers = validated_data.get('covers', instance.covers)
         instance.save()
         return instance
 
