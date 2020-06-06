@@ -142,7 +142,7 @@ class ContentDetail(APIView):
         content = self.get_object(pk)
         self.check_object_permissions(request, content)
         
-        serializer = ContentSerializer(content, request.data)
+        serializer = ContentSerializer(content, request.data, context= {'request' : request})
         
         if serializer.is_valid():
             serializer.save(creator=request.user)
