@@ -73,9 +73,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'ar_platform.urls'
 
@@ -154,10 +154,10 @@ else:
     db = 'default'
     mongoengine.connect(
     db=MONGODB_DATABASES[db]['name'],
-    # host ='localhost'
-    username='dbuser',
-    password='lKDrviFTSBqCTskC',
-    host='mongodb+srv://dbuser:lKDrviFTSBqCTskC@cluster0-tvuyt.mongodb.net/'+ MONGODB_DATABASES[db]['name'] +'?retryWrites=true&w=majority'
+    host ='localhost',
+    # username='dbuser',
+    # password='lKDrviFTSBqCTskC',
+    # host='mongodb+srv://dbuser:lKDrviFTSBqCTskC@cluster0-tvuyt.mongodb.net/'+ MONGODB_DATABASES[db]['name'] +'?retryWrites=true&w=majority'
 )
 
 
