@@ -1,6 +1,6 @@
 from creators.models import Creator
 from app.models import Book
-import app.serializers as AppSerializers
+
 from rest_framework import serializers
 from isbnlib import notisbn, canonical
 
@@ -9,16 +9,16 @@ class ISBNField(serializers.Field):
         return str(value)
 
     def to_internal_value(self, data):
-        data = canonical(data)
-        if not (isinstance(data, str) or isinstance(data, int)):
-            msg = 'Incorrect type. Expected a string or integer, but got %s'
-            raise ValidationError(msg % type(data).__name__)
+        if not (isinstance(data, str)):
+            msg = 'Incorrect type. Expected a string, but got %s'
+            raise serializers.ValidationError(msg % type(data).__name__)
         if notisbn(data):
-            raise ValidationError('Invalid ISBN')
+            raise serializers.ValidationError('Invalid ISBN')
+        data = canonical(data)  
         return str(data)
 
 class CreatorShallowField(serializers.RelatedField):
-    def get_queryset():
+    def get_queryset(self):
         return Creator.objects
 
     def to_representation(self, value):
@@ -26,7 +26,7 @@ class CreatorShallowField(serializers.RelatedField):
 
     def to_internal_value(self, value):
         try:
-            book = self.queryset.get(id=value)
+            book = self.get_queryset().get(id=value)
             return book
         except Creator.DoesNotExist:
             raise serializers.ValidationError('Invalid publisher id')
@@ -36,6 +36,7 @@ class BookField(serializers.RelatedField):
         return Book.objects
 
     def to_representation(self, value):
+        import app.serializers as AppSerializers
         serializer = AppSerializers.BookSerializer(value)
         dic = serializer.data
         del dic['publisher']

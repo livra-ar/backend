@@ -31,7 +31,9 @@ class TokenAuthentication(BaseAuthentication):
         except UnicodeError:
             msg = 'Invalid token header. Token string should not contain invalid characters.'
             raise exceptions.AuthenticationFailed(msg)
-
+        except mongoengine.errors.ValidationError:
+            msg = 'Invalid user id'
+            raise exceptions.AuthenticationFailed(msg)
         return self.authenticate_credentials(token)
 
     def authenticate_credentials(self, key):

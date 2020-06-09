@@ -10,15 +10,16 @@ from rest_framework_mongoengine import viewsets
 from rest_framework.decorators import authentication_classes, permission_classes,api_view
 from pathlib import Path
 import cloudinary
+from file_manager.storage_service import StorageService
 
 class BookList(APIView):
     authentication_classes= [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request, format=None):
-        content = Book.objects.all()
-        serializer = BookSerializer(content, many=True)
-        return Response(serializer.data)
+    # def get(self, request, format=None):
+    #     content = Book.objects.all()
+    #     serializer = BookSerializer(content, many=True)
+    #     return Response(serializer.data)
 
     def post(self, request, format=None):
 
@@ -31,7 +32,6 @@ class BookList(APIView):
             serializer.save(publisher= request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class BookDetail(APIView):
     authentication_classes= [TokenAuthentication]
@@ -86,7 +86,7 @@ class BookDetail(APIView):
         for image in book.covers:
             path = Path(image)
             id = path.name.replace(path.suffix, '')
-            cloudinary.uploader.destroy(public_id=id)
+            StorageService.destroy(public_id=id)
 
         book.delete()
         #delete images from storage & clear index
@@ -96,10 +96,10 @@ class ContentList(APIView):
     authentication_classes= [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request, format=None):
-        content = Content.objects.all()
-        serializer = ContentSerializer(content, many=True)
-        return Response(serializer.data)
+    # def get(self, request, format=None):
+    #     content = Content.objects.all()
+    #     serializer = ContentSerializer(content, many=True)
+    #     return Response(serializer.data)
 
     def post(self, request, format=None):
         if 'id' in request.data.keys():
@@ -165,16 +165,16 @@ class ContentDetail(APIView):
         for image in content.images:
             path = Path(image)
             id = path.name.replace(path.suffix, '')
-            cloudinary.uploader.destroy(public_id=id)
+            StorageService.destroy(public_id=id)
 
         path = Path(content.file)
-        cloudinary.uploader.destroy(public_id=path.name.replace(path.suffix, ''))
+        StorageService.destroy(public_id=path.name.replace(path.suffix, ''))
         content.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class PublisherBooks(APIView, mixins.ListModelMixin):
     authentication_classes= [TokenAuthentication]
-
+    permission_classes = [permissions.IsAuthenticated]
     def get_objects(self, pk):
         try:
             return Book.objects(publisher=pk)
@@ -188,6 +188,24 @@ class PublisherBooks(APIView, mixins.ListModelMixin):
         serializer = BookSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
+
+# class PublisherContent(APIView, mixins.ListModelMixin):
+#     authentication_classes= [TokenAuthentication]
+#     permission_classes = [permissions.IsAuthenticated]
+
+#     def get_objects(self, pk):
+#         try:
+#             return Content.objects(creator=pk)
+#         except Content.DoesNotExist:
+#             raise Http404
+
+#     def get_queryset(self):
+#         content = self.get_objects(self.request.user)
+#         return content
+
+#     def get(self, request, format=None):
+#         serializer = ContentShallowSerializer(self.get_queryset(), many=True)
+#         return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -224,7 +242,6 @@ def book_content(request, pk, format=None):
 @permission_classes([permissions.AllowAny])
 def book_by_isbn(request, isbn, format=None):
     isbn = isbn.replace('-', '')
-    print(isbn)
     try:
         book = Book.objects.get(isbns=isbn, active=True)
         serializer = BookDeepSerializer(book)

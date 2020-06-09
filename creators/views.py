@@ -33,7 +33,6 @@ class CreatorAuthToken(ObtainAuthToken):
         })
 
 class UserViewSet(mixins.CreateModelMixin,
-                    mixins.RetrieveModelMixin,
                   viewsets.GenericViewSet):
     permission_classes = (permissions.AllowAny, )
     serializer_class = UserSerializer
@@ -41,8 +40,11 @@ class UserViewSet(mixins.CreateModelMixin,
     def get_queryset(self):
         return Creator.objects.all()
     def create(self, request, *args, **kwargs):
+        _mutable = request.data._mutable
+        request.data._mutable = True
         request.data['email'] = request.data['email'].lower()
         request.data['password'] = make_password(request.data['password'])
+        request.data._mutable = _mutable
         return super(UserViewSet, self).create(request, *args, **kwargs)
 
 @api_view(['HEAD'])

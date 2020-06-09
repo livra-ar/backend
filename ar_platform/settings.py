@@ -103,8 +103,8 @@ WSGI_APPLICATION = 'ar_platform.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql',
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        # 'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'd8f4ccoc8cg552',
         'USER': 'yrbpmcnnvitdjr',
         'PASSWORD': '651957d666616702e7315ba09a262b51dcd9b2007a6ad590d103df65d1fbb5f2',
@@ -112,6 +112,9 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+if 'test' in sys.argv or 'test_coverage' in sys.argv: #Covers regular testing and django-coverage
+    DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 
 MONGODB_DATABASES = {

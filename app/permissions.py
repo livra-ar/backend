@@ -12,7 +12,6 @@ class IsOwnerOfBookOrReadOnly(permissions.BasePermission):
 		return object.publisher == request.user
 
 	def has_permission(self, request, view):
-		print(view)
 		if request.method not in permissions.SAFE_METHODS:
 			if 'id' in request.data:
 				book = Book.objects.get(id=request.data['id'])

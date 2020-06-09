@@ -56,12 +56,12 @@ class ValidateBookOwnershipTest(TestCase):
     def test_invalid_request(self):
         self.serializer.context['request'].user = self.creator2
         dic = {
-            'book': self.book.id
+            'book': self.book
         }
         self.assertRaises(serializers.ValidationError,self.validator ,dic, self.serializer)
     def test_valid_request(self):
         self.serializer.context['request'].user = self.creator1
         dic = {
-            'book': self.book.id
+            'book': self.book
         }
         self.validator(dic, self.serializer)

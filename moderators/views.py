@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth import authenticate, login
 # from django.contrib.auth import authenticate, login
 from .authentication import ModeratorBackend
-# Create your views here.
+
 # def authenticate(request, username=None, password=None):
 #     try:
 #         email = username
@@ -23,33 +23,33 @@ from .authentication import ModeratorBackend
 #     request.session['uid'] = user.id;
 
 # Admin Login
-def login_view(request):
-    if request.method == 'POST':
-        form = Login(request.POST)
+# def login_view(request):
+#     if request.method == 'POST':
+#         form = Login(request.POST)
 
-        if form.is_valid():
-            email = request.POST['email']
-            password = request.POST['password']
-            mod = authenticate(request, username=email, password=password)
-            if mod is not None:
-                login(request, mod)
-                return HttpResponseRedirect('/admin/dashboard')
-            else:
-                return HttpResponseRedirect('/admin/login')
-    else:
-        form = Login()
-    return render(request, 'form.html', {'form': form})
+#         if form.is_valid():
+#             email = request.POST['email']
+#             password = request.POST['password']
+#             mod = authenticate(request, username=email, password=password)
+#             if mod is not None:
+#                 login(request, mod)
+#                 return HttpResponseRedirect('/admin/dashboard')
+#             else:
+#                 return HttpResponseRedirect('/admin/login')
+#     else:
+#         form = Login()
+#     return render(request, 'form.html', {'form': form})
 
-# Admin Add
-def create_view(request):
-    if request.method == 'POST':
-        form = Create(request.POST)
+# # Admin Add
+# def create_view(request):
+#     if request.method == 'POST':
+#         form = Create(request.POST)
 
-        if form.is_valid():
-            return HttpResponseRedirect('/admin/dashboard')
-    else:
-        form = Create()
-    return render(request, 'form.html', {'form': form})
+#         if form.is_valid():
+#             return HttpResponseRedirect('/admin/dashboard')
+#     else:
+#         form = Create()
+#     return render(request, 'form.html', {'form': form})
 
 
 # View Content Table

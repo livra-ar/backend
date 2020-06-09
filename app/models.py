@@ -12,6 +12,12 @@ def make_ngrams(word, min_size=2):
         for i in range(0, max(0, length - size) + 1)
     ))
 
+def ngrams_to_representation(phrase):
+	ngrams = []
+	for word in phrase.split():
+		ngrams.extend(make_ngrams(word))
+	return ' '.join(ngrams)
+
 class Book(Document):
 	title = fields.StringField(required=True)
 	isbns = fields.ListField(fields.StringField(unique=True), required=True)
@@ -30,10 +36,7 @@ class Book(Document):
     ]}
 
 	def save(self, *args, **kwargs):
-		ngrams = []
-		for word in self.title.split():
-			ngrams.extend(make_ngrams(word))
-		self.ngrams = ' '.join(ngrams)
+		self.ngrams = ngrams_to_representation(self.title)
 		return super(Book, self).save(*args, **kwargs)
 
 class Content(Document):

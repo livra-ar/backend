@@ -40,13 +40,17 @@ def get_urls():
     urls = _admin_site_get_urls()
     urls += [
             url(r'^published-content-list/$',
-                 admin.site.admin_view(list_published_content)),
+                 admin.site.admin_view(list_published_content),
+                 name='mod-published-content'),
             url(r'^unpublished-content-list/$',
-            admin.site.admin_view(list_unpublished_content)),
+            admin.site.admin_view(list_unpublished_content),
+                 name='mod-unpublished-content'),
                url(r'^published-book-list/$',
-                 admin.site.admin_view(list_published_book)),
+                 admin.site.admin_view(list_published_book),
+                 name='mod-published-books'),
             url(r'^unpublished-book-list/$',
-            admin.site.admin_view(list_unpublished_book)),
+            admin.site.admin_view(list_unpublished_book),
+                 name='mod-unpublished-books'),
         ]
     return urls
 
@@ -63,13 +67,13 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     url(r'^api/v1/', include('app.urls')),
-    path('user/emails/<email>/', check_email),
+    path('user/emails/<email>/', check_email, name='check-email'),
     path('auth/',CreatorAuthToken.as_view(), name='api_token_auth'),  # <-- And here
-    path('files/delete/<slug:id>/', file_delete_view),
-    path('upload/raw/<slug:filename>', zip_upload_view),
-    path('upload/img/<slug:filename>', image_upload_view),
-    path('api/book/by-isbn/<slug:isbn>', book_by_isbn),
-     path('api/book/by-title/', books_by_title),
+    path('files/delete/<slug:id>/', file_delete_view, name='file-delete'),
+    path('upload/raw/<slug:filename>', content_upload_view, name='content-upload'),
+    path('upload/img/<slug:filename>', image_upload_view, name='image-upload'),
+    path('api/book/by-isbn/<slug:isbn>', book_by_isbn, name='book-by-isbn'),
+    path('api/book/by-title/', books_by_title),
     path('book/<slug:pk>', BookDetail.as_view()),
     path('book/', BookList.as_view()),
     path('publisher/books/', PublisherBooks.as_view()),

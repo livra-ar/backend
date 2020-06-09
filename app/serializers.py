@@ -6,16 +6,16 @@ from creators.serializers import ShallowCreatorSerializer, SubCreatorSerializer
 from rest_framework.validators import UniqueValidator
 from django.http import Http404
 
-from .fields import *
+import app.fields as CustomFields
 
 
 class BookSerializer(serializers.Serializer):
     id = serializers.CharField(read_only=True)
     title = serializers.CharField(required=True)
-    isbns = serializers.ListField(child=ISBNField(), allow_empty=False)
+    isbns = serializers.ListField(child=CustomFields.ISBNField(), allow_empty=False)
     authors = serializers.ListField(child=serializers.CharField(), allow_empty=False)
     active = serializers.BooleanField(read_only=True)
-    publisher = CreatorShallowField(read_only=True)
+    publisher = CustomFields.CreatorShallowField(read_only=True)
     covers = serializers.ListField(child=serializers.URLField(), allow_empty=False)
     
     def create(self, validated_data):
@@ -56,8 +56,8 @@ class ContentSerializer(serializers.Serializer):
     description = serializers.CharField(required=True)
     images = serializers.ListField(child=serializers.URLField(), allow_empty=False)
     file = serializers.URLField(required=True)
-    book = BookField(required=True)
-    creator = CreatorShallowField(required=False)
+    book = CustomFields.BookField(required=True)
+    creator = CustomFields.CreatorShallowField(required=False)
     active = serializers.BooleanField(required=False)
     animated = serializers.BooleanField(required=True)
     size = serializers.IntegerField(required=True)
@@ -105,7 +105,7 @@ class ContentShallowSerializer(serializers.Serializer):
     active = serializers.BooleanField()
     animated = serializers.BooleanField()
     size = serializers.IntegerField()
-    creator = CreatorShallowField()
+    creator = CustomFields.CreatorShallowField()
 
 class BookDeepSerializer(BookSerializer):
     def to_representation(self, data):
