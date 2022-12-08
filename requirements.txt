@@ -1,6 +1,6 @@
 asgiref==3.2.7
 bson==0.5.8
-certifi==2019.11.28
+certifi==2022.12.7
 cloudinary==1.20.0
 cycler==0.10.0
 dask==2.14.0
